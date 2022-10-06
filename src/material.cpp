@@ -145,8 +145,8 @@ Entry* probe(const Position& pos) {
   // Let's look if we have a specialized evaluation function for this particular
   // material configuration. Firstly we look for a fixed configuration one, then
   // for a generic one if the previous search failed.
-  if ((e->evaluationFunction = Endgames::probe<Value>(key)) != nullptr)
-      return e;
+//  if ((e->evaluationFunction = Endgames::probe<Value>(key)) != nullptr)
+//      return e;
 
   for (Color c : { WHITE, BLACK })
       if (is_KXK(pos, c))
@@ -157,13 +157,13 @@ Entry* probe(const Position& pos) {
 
   // OK, we didn't find any special evaluation function for the current material
   // configuration. Is there a suitable specialized scaling function?
-  const auto* sf = Endgames::probe<ScaleFactor>(key);
-
-  if (sf)
-  {
-      e->scalingFunction[sf->strongSide] = sf; // Only strong color assigned
-      return e;
-  }
+//  const auto* sf = Endgames::probe<ScaleFactor>(key);
+//
+//  if (sf)
+//  {
+//      e->scalingFunction[sf->strongSide] = sf; // Only strong color assigned
+//      return e;
+//  }
 
   // We didn't find any specialized scaling function, so fall back on generic
   // ones that refer to more than one material distribution. Note that in this

@@ -488,6 +488,30 @@ Bitboard Position::attackers_to(Square s, Bitboard occupied) const {
         | (attacks_bb<KING>(s)             & pieces(KING));
 }
 
+/// Chesssimp addition: a white piece can move only if it's next to another white piece.
+bool Position::move_is_chesssimp_legal(Move m) const {
+  Square from = from_sq(m);
+  Rank rank = rank_of(from);
+  File file = file_of(from);
+  // return false;
+  if (this->side_to_move() == WHITE && type_of(piece_on(from)) > PAWN) {
+    for (int x = -1; x <= 1; x++) {
+      for (int y = -1; y <= 1; y++) {
+        if (x == 0 && y == 0) continue;
+        if ((file == FILE_A && x == -1) || (file == FILE_H && x == 1)) continue;
+        if ((rank == RANK_1 && y == -1) || (rank == RANK_8 && y == 1)) continue;
+        Square s = make_square(File(int(file) + x), Rank(int(rank) + y));
+        Piece p = piece_on(s);
+        if (color_of(p) == WHITE &&
+            (type_of(p) == KNIGHT || type_of(p) == BISHOP || type_of(p) == ROOK || type_of(p) == QUEEN || type_of(p) == QUEEN))
+          return true;
+      }
+    }
+    return false;
+  } else {
+    return true;
+  }
+}
 
 /// Position::legal() tests whether a pseudo-legal move is legal
 
@@ -501,6 +525,8 @@ bool Position::legal(Move m) const {
 
   assert(color_of(moved_piece(m)) == us);
   assert(piece_on(square<KING>(us)) == make_piece(us, KING));
+    
+  if (!this->move_is_chesssimp_legal(m)) return false;
 
   // En passant captures are a tricky special case. Because they are rather
   // uncommon, we do it simply by testing whether the king is attacked after

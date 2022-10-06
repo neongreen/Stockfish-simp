@@ -123,6 +123,7 @@ public:
   template<PieceType Pt> Bitboard attacks_by(Color c) const;
 
   // Properties of moves
+  bool move_is_chesssimp_legal(Move m) const;
   bool legal(Move m) const;
   bool pseudo_legal(const Move m) const;
   bool capture(Move m) const;

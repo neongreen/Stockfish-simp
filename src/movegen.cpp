@@ -170,8 +170,11 @@ namespace {
         if (Checks && (Pt == QUEEN || !(pos.blockers_for_king(~Us) & from)))
             b &= pos.check_squares(Pt);
 
-        while (b)
-            *moveList++ = make_move(from, pop_lsb(b));
+        while (b) {
+            Move m = make_move(from, pop_lsb(b));
+            if (pos.move_is_chesssimp_legal(m)) *moveList++ = m;
+        }
+            
     }
 
     return moveList;
